@@ -27,7 +27,7 @@ def kirim_data():
 
 def threadpool_kirim():
     with ThreadPoolExecutor() as executor:
-        threadpool = 0
+        threadpool_num = 0
         catat_awal = time.time()
         futures = set()
         while time.time() - catat_awal < 60:
@@ -36,15 +36,21 @@ def threadpool_kirim():
             
             # Hapus future yang sudah selesai dari arr dan tambahkan ke futures_selesai
             futures_selesai = {future for future in futures if future.done()}
-            threadpool += len(futures_selesai)
+            threadpool_num += len(futures_selesai)
             futures -= futures_selesai
 
-        # Tunggu semua task selesai sebelum keluar dari program
+        # Menunggu semua tugas selesai sebelum keluar dari program, 
+        # dilakukan dengan melakukan iterasi melalui objek futures 
+        # yang berisi hasil dari setiap tugas. 
+        # Dengan menggunakan future.result(), program akan menunggu 
+        # hingga setiap tugas selesai sebelum melanjutkan eksekusi.
         for future in futures:
             future.result()
 
-        # Cetak jumlah request yang telah dikirim setelah loop selesai
-        logging.warning(f"Total threadpool yang dikirim: {threadpool}")
+        # Cetak jumlah permintaan yang telah dikirim menggunakan 
+        # logging. Pesan yang dicetak menampilkan jumlah threadpool 
+        # yang telah dikirim dalam format yang sesuai.
+        logging.warning(f"Total threadpool yang dikirim: {threadpool_num}")
 
 if __name__=='__main__':
     threadpool_kirim()
