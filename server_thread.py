@@ -62,7 +62,7 @@ class ServerWaktu(threading.Thread):
             clt = ProcessTheClient(self.connection, self.client_address, self)
             clt.start()
             self.the_clients.append(clt)
-            logging.warning(f"Total clients connected: {len(self.the_clients)}")
+            logging.warning(f"Total klien yang terhubung: {len(self.the_clients)}")
 
 def main():
 	svr = ServerWaktu()
