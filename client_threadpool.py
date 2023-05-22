@@ -2,8 +2,8 @@ import sys
 import socket
 import logging
 import threading
-import time # untuk melakukan analisis testing waktu pada thread
-from concurrent import futures  # untuk mengimplementasikan threadpool pada klien
+import time
+from concurrent.futures import ThreadPoolExecutor
 
 def kirim_data():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,8 +29,11 @@ def kirim_data():
 if __name__ == '__main__':
     threads = 0
     start_time = time.time()
-    with futures.ThreadPoolExecutor(max_workers=10) as executor:
-        while time.time() - start_time < 60:
+    with ThreadPoolExecutor() as executor:
+        while True:
+            if time.time() - start_time >= 60:
+                break
             threads += 1
             executor.submit(kirim_data)
+            logging.warning(f"Diff: {time.time() - start_time} - threads: {threads}")
     logging.warning(f"Total thread yang dibuat: {threads}")
